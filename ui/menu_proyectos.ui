@@ -1,0 +1,836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>942</width>
+    <height>689</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* ======== GENERAL ======== */ QMainWindow { background-color: #f5f8ff; /* Fondo azul muy claro */ } QFrame { background-color: #ffffff; border-radius: 8px; } /* ======== MENÚ LATERAL ======== */ #frame_botones_menu { background-color: #0d1b4c; /* Azul oscuro elegante */ border-top-right-radius: 12px; border-bottom-right-radius: 12px; } #frame_paginas { background-color: #f5f8ff; } /* ======== BOTONES GENERALES ======== */ QPushButton { background-color: #e6ecff; border: 1px solid #0d1b4c; border-radius: 6px; padding: 6px 12px; color: #0d1b4c; font: bold 9pt &quot;Segoe UI&quot;; } QPushButton:hover { background-color: #b8c8ff; border: 1px solid #233d91; } QPushButton:pressed { background-color: #0d1b4c; color: #ffffff; } /* ======== BOTONES DEL MENÚ ======== */ #boton_proyectos, #boton_agregar, #boton_actualizar, #boton_eliminar, #boton_salir { background-color: transparent; border: none; color: #f5f8ff; font: bold 9pt &quot;Segoe UI&quot;; text-align: left; padding: 6px 10px; } #boton_proyectos:hover, #boton_agregar:hover, #boton_actualizar:hover, #boton_eliminar:hover, #boton_salir:hover { background-color: #233d91; border-left: 4px solid #f5f8ff; } /* ======== CAMPOS DE TEXTO ======== */ QLineEdit { background-color: #ffffff; border: 1px solid #8ea8ff; border-radius: 4px; padding: 4px; color: #0d1b4c; selection-background-color: #0d1b4c; selection-color: #ffffff; } QLineEdit:focus { border: 1px solid #0d1b4c; } /* ======== LABELS ======== */ QLabel { color: #0d1b4c; font: 9pt &quot;Segoe UI&quot;; } /* ======== BOTÓN PRINCIPAL (ej. Agregar) ======== */ #boton_agregar_agregar, #boton_actualizar_actualizar, #boton_eliminar_eliminar{ background-color: #0d1b4c; color: white; border-radius: 10px; padding: 6px 18px; font: bold 10pt &quot;Segoe UI&quot;; } #boton_agregar_agregar:hover { background-color: #233d91; } #boton_agregar_agregar:pressed { background-color: #001a66; } /* ======== STACKED WIDGET ======== */ QStackedWidget { background-color: #f5f8ff; } /* ======== TÍTULO SUPERIOR ======== */ #label { font: bold 12pt &quot;Segoe UI&quot;; color: #0d1b4c; background-color: transparent; }</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,9">
+    <item>
+     <widget class="QFrame" name="frame_superior">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="boton_menu">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset>
+           <normaloff>../../../../.designer/resources/imagenes/proyectos/menu.png</normaloff>../../../../.designer/resources/imagenes/proyectos/menu.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>40</width>
+           <height>40</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>279</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_menu">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>100</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>9</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
+         <property name="text">
+          <string>Proyectos</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>280</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame_central">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QFrame" name="frame_botones_menu">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="boton_proyectos">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Proyectos</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../../../.designer/resources/imagenes/proyectos/folder.png</normaloff>../../../../.designer/resources/imagenes/proyectos/folder.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="boton_agregar">
+            <property name="text">
+             <string>Agregar</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../../../.designer/resources/imagenes/proyectos/add.png</normaloff>../../../../.designer/resources/imagenes/proyectos/add.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="boton_actualizar">
+            <property name="text">
+             <string>Actualizar</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../../../.designer/resources/imagenes/proyectos/actualizar.png</normaloff>../../../../.designer/resources/imagenes/proyectos/actualizar.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="boton_eliminar">
+            <property name="text">
+             <string>Eliminar</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../../../.designer/resources/imagenes/proyectos/delete.png</normaloff>../../../../.designer/resources/imagenes/proyectos/delete.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="boton_salir">
+            <property name="text">
+             <string>Salir</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../../../../.designer/resources/imagenes/proyectos/salir.png</normaloff>../../../../.designer/resources/imagenes/proyectos/salir.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>40</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>150</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Derechos reservados 2025</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_paginas">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_menu_proyectos">
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QFrame" name="frame">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QGridLayout" name="gridLayout_2">
+                 <item row="1" column="0">
+                  <widget class="QTableWidget" name="tabla_proyectos">
+                   <column>
+                    <property name="text">
+                     <string>Nombre</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ubicacion</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Presupuesto</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Estado</string>
+                    </property>
+                   </column>
+                   <column>
+                    <property name="text">
+                     <string>Ir a</string>
+                    </property>
+                   </column>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QPushButton" name="botonaccion_refrescar">
+                   <property name="text">
+                    <string>PushButton</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_agregar">
+             <layout class="QVBoxLayout" name="verticalLayout_4">
+              <item>
+               <widget class="QFrame" name="frame_4">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_5">
+                 <item>
+                  <widget class="QFrame" name="frame_agregar">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_nombre">
+                      <property name="text">
+                       <string>Nombre</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLineEdit" name="nombre_agregar"/>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_estado">
+                      <property name="text">
+                       <string>Estado</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLineEdit" name="presupuesto_agregar"/>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLineEdit" name="cliente_agregar"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_ubicacion">
+                      <property name="text">
+                       <string>Ubicacion</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLineEdit" name="estado_agregar"/>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_cliente">
+                      <property name="text">
+                       <string>Cliente</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="ubicacion_agregar"/>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_presupuesto">
+                      <property name="text">
+                       <string>Presupuesto</string>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <spacer name="verticalSpacer_6">
+                   <property name="orientation">
+                    <enum>Qt::Vertical</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>20</width>
+                     <height>40</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="boton_agregar_agregar">
+                   <property name="maximumSize">
+                    <size>
+                     <width>16777215</width>
+                     <height>16777215</height>
+                    </size>
+                   </property>
+                   <property name="text">
+                    <string>Agregar</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../../../../.designer/resources/imagenes/proyectos/add.png</normaloff>../../../../.designer/resources/imagenes/proyectos/add.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>50</width>
+                     <height>45</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_actualizar">
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QFrame" name="frame_2">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <item>
+                  <widget class="QFrame" name="frame_actualizar">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_3">
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_estado_ac">
+                      <property name="text">
+                       <string>Estado</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLineEdit" name="estado_actualizar"/>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_nombre_ac">
+                      <property name="text">
+                       <string>Nombre</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="ubicacion_actualizar"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_ubicacion_ac">
+                      <property name="text">
+                       <string>Ubicacion</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_presupuesto_ac">
+                      <property name="text">
+                       <string>Presupuesto</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLineEdit" name="presupuesto_actualizar"/>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLineEdit" name="nombre_actualizar"/>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_cliente_ac">
+                      <property name="text">
+                       <string>Cliente</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLineEdit" name="cliente_actualizar"/>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="boton_buscar_actualizar">
+                      <property name="minimumSize">
+                       <size>
+                        <width>100</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>100</width>
+                        <height>50</height>
+                       </size>
+                      </property>
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>../resources/imagenes/proyectos/buscar.png</normaloff>../resources/imagenes/proyectos/buscar.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>50</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="boton_actualizar_actualizar">
+                   <property name="text">
+                    <string>Actualizar</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../../../../.designer/resources/imagenes/proyectos/actualizar.png</normaloff>../../../../.designer/resources/imagenes/proyectos/actualizar.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>50</width>
+                     <height>45</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_eliminar">
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QFrame" name="frame_3">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_3">
+                 <item>
+                  <widget class="QFrame" name="frame_eliminar">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_4">
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_nombre_e">
+                      <property name="text">
+                       <string>Nombre</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_presupuesto_e">
+                      <property name="text">
+                       <string>Presupuesto</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="1">
+                     <widget class="QLineEdit" name="ubicacion_eliminar"/>
+                    </item>
+                    <item row="0" column="1">
+                     <widget class="QLineEdit" name="nombre_eliminar"/>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_ubicacion_e">
+                      <property name="text">
+                       <string>Ubicacion</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="1">
+                     <widget class="QLineEdit" name="estado_eliminar"/>
+                    </item>
+                    <item row="4" column="1">
+                     <widget class="QLineEdit" name="cliente_eliminar"/>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_estado_e">
+                      <property name="text">
+                       <string>Estado</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_cliente_e">
+                      <property name="text">
+                       <string>Cliente</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="1">
+                     <widget class="QLineEdit" name="presupuesto_eliminar"/>
+                    </item>
+                    <item row="0" column="2">
+                     <widget class="QPushButton" name="boton_buscar_eliminar">
+                      <property name="text">
+                       <string/>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>../resources/imagenes/proyectos/buscar.png</normaloff>../resources/imagenes/proyectos/buscar.png</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>50</width>
+                        <height>45</height>
+                       </size>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="boton_eliminar_eliminar">
+                   <property name="text">
+                    <string>Eliminar</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../../../../.designer/resources/imagenes/proyectos/delete.png</normaloff>../../../../.designer/resources/imagenes/proyectos/delete.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>50</width>
+                     <height>45</height>
+                    </size>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_detalle_proyecto">
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QFrame" name="frame_detalles_proyecto">
+                <property name="frameShape">
+                 <enum>QFrame::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Raised</enum>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_7">
+                 <item>
+                  <widget class="QFrame" name="frame_detalles_proyecto_2">
+                   <property name="frameShape">
+                    <enum>QFrame::StyledPanel</enum>
+                   </property>
+                   <property name="frameShadow">
+                    <enum>QFrame::Raised</enum>
+                   </property>
+                   <layout class="QGridLayout" name="gridLayout_5">
+                    <item row="0" column="2">
+                     <widget class="QLabel" name="nombre_detalles">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="2">
+                     <widget class="QLabel" name="ubicacion_detalles">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="0">
+                     <widget class="QLabel" name="label_11">
+                      <property name="text">
+                       <string>Cliente:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="0">
+                     <widget class="QLabel" name="label_9">
+                      <property name="text">
+                       <string>Presupuesto:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="1" column="0">
+                     <widget class="QLabel" name="label_8">
+                      <property name="text">
+                       <string>Ubicacion:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="0">
+                     <widget class="QLabel" name="label_10">
+                      <property name="text">
+                       <string>Estado:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="0" column="0">
+                     <widget class="QLabel" name="label_7">
+                      <property name="text">
+                       <string>Nombre:</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="2" column="2">
+                     <widget class="QLabel" name="presupuesto_detalles">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="3" column="2">
+                     <widget class="QLabel" name="estado_detalles">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                    <item row="4" column="2">
+                     <widget class="QLabel" name="cliente_detalles">
+                      <property name="text">
+                       <string/>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
