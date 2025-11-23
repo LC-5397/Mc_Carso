@@ -12,7 +12,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.show()
 
         self.proyectodao = ProyectoDAO() 
-        
+        self.menu_colapsado= False
         
         #3.- Configurar contenedores
         #eliminar barra y de titulo - opacidad
@@ -35,8 +35,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.boton_actualizar.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_actualizar))
         self.boton_eliminar.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_eliminar))
         
-
-        
+                
         #Botones para guardar, buscar, actualizar, eliminar y salir
         self.boton_agregar_agregar.clicked.connect(self.guardar_proyecto)
         self.boton_actualizar_actualizar.clicked.connect(self.actualizar_proyecto)
@@ -47,6 +46,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.boton_buscar_eliminar.clicked.connect(self.buscar_eliminar)
 
         self.botonaccion_refrescar.clicked.connect(self.llenar_tabla)
+        self.boton_regresar.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_menu_proyectos))
         
     
 #5.- Operaciones con el modelo de datos 
@@ -60,9 +60,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
             self.tabla_proyectos.insertRow(fila)
 
             self.tabla_proyectos.setItem(fila, 0, QtWidgets.QTableWidgetItem(str(proyecto.nombre)))
-            self.tabla_proyectos.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(proyecto.ubicacion)))
-            self.tabla_proyectos.setItem(fila, 2, QtWidgets.QTableWidgetItem(str(proyecto.presupuesto)))
-            self.tabla_proyectos.setItem(fila, 3, QtWidgets.QTableWidgetItem(str(proyecto.estado)))
+            self.tabla_proyectos.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(proyecto.estado)))
 
             # --- BOTÓN DE DETALLE ---
             btn = QtWidgets.QPushButton()
@@ -71,10 +69,29 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
             btn.setStyleSheet("border: none;")  
 
             # IMPORTANTE: guardar el id del proyecto
-            btn.clicked.connect(lambda checked, p=proyecto: self.page_detalle_proyecto(p))
+            btn.clicked.connect(lambda checked, nombre=proyecto.nombre: self.page_detalle(nombre))
 
-            self.tabla_proyectos.setCellWidget(fila, 4, btn)
+            self.tabla_proyectos.setCellWidget(fila, 2, btn)
 
+    def page_detalle(self, nombre):
+        # Obtener el proyecto desde la BD
+        proyecto = self.proyectodao.buscarProyectoPorNombre(nombre)
+
+        if proyecto is None:
+            print("Proyecto no encontrado")
+            return
+
+        # Cambiar página
+        self.stackedWidget.setCurrentWidget(self.page_detalle_proyecto)
+
+        # Rellenar tus line edit (o labels, lo que tengas)
+        self.nombre_detalles.setText(proyecto.nombre)
+        self.ubicacion_detalles.setText(proyecto.ubicacion)
+        self.presupuesto_detalles.setText(str(proyecto.presupuesto))
+        self.estado_detalles.setText(proyecto.estado)
+        self.cliente_detalles.setText(proyecto.nombre_cliente)   
+
+        
     def volver_al_menu(self):
         self.close()
         # Importar la clase correcta
@@ -86,43 +103,46 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.login_dialog.stackedWidget.setCurrentWidget(self.login_dialog.page_menu)
         
     def guardar_proyecto(self):
-        nombre= self.nombre_agregar.text()
-        ubicacion= self.ubicacion_agregar.text()
-        presupuesto= self.presupuesto_agregar.text()
-        estado= self.estado_agregar.text()
-        cliente= self.cliente_agregar.text()
-        
+        nombre = self.nombre_agregar.text()
+        ubicacion = self.ubicacion_agregar.text()
+        presupuesto = self.presupuesto_agregar.text()
+        estado = self.estado_agregar.text()
+        cliente = self.cliente_agregar.text()
+
         if not nombre:
             print("Debes ingresar el Nombre del proyecto.")
             return
+
         self.proyectodao.proyecto.nombre = nombre
         self.proyectodao.proyecto.ubicacion = ubicacion
         self.proyectodao.proyecto.presupuesto = presupuesto
         self.proyectodao.proyecto.estado = estado
-        self.proyectodao.proyecto.cliente = cliente
+        self.proyectodao.proyecto.nombre_cliente = cliente
 
         self.proyectodao.guardarProyecto()
+
         
 
     def actualizar_proyecto(self):
-        nombre= self.nombre_actualizar.text()
-        ubicacion= self.ubicacion_actualizar.text()
-        presupuesto= self.presupuesto_actualizar.text()
-        estado= self.estado_actualizar.text()
-        cliente= self.cliente_actualizar.text()
-        
+        nombre = self.nombre_actualizar.text()
+        ubicacion = self.ubicacion_actualizar.text()
+        presupuesto = self.presupuesto_actualizar.text()
+        estado = self.estado_actualizar.text()
+        cliente = self.cliente_actualizar.text()
+
         if not nombre:
             print("Debes ingresar el Nombre del proyecto.")
             return
+
         self.proyectodao.proyecto.nombre = nombre
         self.proyectodao.proyecto.ubicacion = ubicacion
         self.proyectodao.proyecto.presupuesto = presupuesto
         self.proyectodao.proyecto.estado = estado
-        self.proyectodao.proyecto.cliente = cliente
+        self.proyectodao.proyecto.nombre_cliente = cliente
 
         self.proyectodao.actualizarProyecto()
 
-
+   
     def eliminar_proyecto(self):
         nombre= self.nombre_eliminar.text()
         if not nombre:
@@ -135,17 +155,15 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
     def buscar_actualizar(self):
         nombre = self.nombre_actualizar.text().strip()
         if not nombre:
-            print("Debes ingresar el SKU del producto a buscar.")
+            print("Debes ingresar el Nombre del proyecto a buscar.")
             return
         self.proyectodao.proyecto.nombre = nombre
-
-        proyecto = self.proyectodao.buscarProyectoPorNombre()
-
+        proyecto = self.proyectodao.buscarProyectoPorNombre(nombre)
         if proyecto:
             self.ubicacion_actualizar.setText(str(proyecto.ubicacion))
             self.presupuesto_actualizar.setText(str(proyecto.presupuesto))  
             self.estado_actualizar.setText(str(proyecto.estado))
-            self.cliente_actualizar.setText(str(proyecto.cliente))
+            self.cliente_actualizar.setText(str(proyecto.nombre_cliente))
             print("Proyecto encontrado.")
         else:
             print("No se encontró ningún proyecto con ese nombre.")
@@ -156,14 +174,12 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
             print("Debes ingresar el SKU del producto a buscar.")
             return
         self.proyectodao.proyecto.nombre = nombre
-
-        proyecto = self.proyectodao.buscarProyectoPorNombre()
-
+        proyecto = self.proyectodao.buscarProyectoPorNombre(nombre)
         if proyecto:
             self.ubicacion_eliminar.setText(str(proyecto.ubicacion))
             self.presupuesto_eliminar.setText(str(proyecto.presupuesto))  
             self.estado_eliminar.setText(str(proyecto.estado))
-            self.cliente_eliminar.setText(str(proyecto.cliente))
+            self.cliente_eliminar.setText(str(proyecto.nombre_cliente))
             print("Proyecto encontrado.")
         else:
             print("No se encontró ningún proyecto con ese nombre.")
@@ -186,27 +202,21 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
 
     #7.- Mover menú
     def mover_menu(self):
-        if True:			
-            width = self.frame_lateral.width()
-            widthb = self.boton_menu.width()
-            normal = 0
-            if width==0:
-                extender = 200
-                self.boton_menu.setText("Menú")
-            else:
-                extender = normal
-                self.boton_menu.setText("")
-                
-            self.animacion = QPropertyAnimation(self.frame_lateral, b'minimumWidth')
-            self.animacion.setDuration(300)
-            self.animacion.setStartValue(width)
-            self.animacion.setEndValue(extender)
-            self.animacion.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-            self.animacion.start()
-            
-            self.animacionb = QPropertyAnimation(self.boton_menu, b'minimumWidth')
-        
-            self.animacionb.setStartValue(width)
-            self.animacionb.setEndValue(extender)
-            self.animacionb.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
-            self.animacionb.start()
+        # IMPORTANTE: permitir que el frame pueda bajar a 0
+        self.frame_botones_menu.setMaximumWidth(self.frame_botones_menu.width())
+
+        width = self.frame_botones_menu.maximumWidth()
+
+        if self.menu_colapsado:
+            new_width = 200   # abierto
+        else:
+            new_width = 0     # cerrado
+
+        self.anim = QPropertyAnimation(self.frame_botones_menu, b"maximumWidth")
+        self.anim.setDuration(300)
+        self.anim.setStartValue(width)
+        self.anim.setEndValue(new_width)
+        self.anim.setEasingCurve(QtCore.QEasingCurve.InOutQuart)
+        self.anim.start()
+
+        self.menu_colapsado = not self.menu_colapsado

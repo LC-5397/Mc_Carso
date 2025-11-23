@@ -7,9 +7,9 @@ class ConexionBD:
     def establecerConexionBD(self):
         try:
             self.conexion = pyodbc.connect(
-            'DRIVER={SQL Server};'
-            'SERVER=SALAF008-09\\SQLEXPRESS;'
-            'DATABASE=grupoCarso;'
+            'DRIVER={ODBC Driver 17 for SQL Server};'
+            'SERVER=LAPTOP-THRU65TD;'
+            'DATABASE=gurpoCarso;'
             'UID=sa;'
             'PWD=Password01;'
            

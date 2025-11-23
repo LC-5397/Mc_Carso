@@ -9,7 +9,7 @@ class ProyectoDAO:
     def listarProyectos(self):
         basedatos = ConexionBD()
         basedatos.establecerConexionBD()
-        sp = "EXEC dbo.sp_listar_proyectos"
+        sp = "EXEC dbo.sp_listar_proyecto"
         cursor = basedatos.conexion.cursor()
         cursor.execute(sp)
         datos = cursor.fetchall()
@@ -17,38 +17,34 @@ class ProyectoDAO:
         return datos
     
     def guardarProyecto(self):
-        basedatos= ConexionBD()
+        basedatos = ConexionBD()
         basedatos.establecerConexionBD()
-        #hacemos la conexion
-        sp = 'exec [dbo].[sp_insertar_proyecto] @nombre=?,@ubicacion=?, @presupuesto=?, @estado=?,@nombre_cliente=?'   
-        param = (self.proyecto.nombre,self.proyecto.ubicacion,self.proyecto.presupuesto,self.proyecto.estado,self.proyecto.nombre_cliente)
+        sp = """EXEC dbo.sp_insertar_proyecto @nombre_cliente=?,@nombre_proyecto=?,@ubicacion=?, @presupuesto=?, @estado=?"""
+        params = (self.proyecto.nombre_cliente,self.proyecto.nombre,self.proyecto.ubicacion,self.proyecto.presupuesto,self.proyecto.estado)
         cursor = basedatos.conexion.cursor()
-        cursor.execute(sp, param)     
+        cursor.execute(sp, params)
         cursor.commit()
-                
-        #cerramos la conexion
         basedatos.cerrarConexionBD()
+
 
     def actualizarProyecto(self):
         basedatos = ConexionBD()
         basedatos.establecerConexionBD()
-        sp = ('exec [dbo].[sp_actualizar_proyecto] @nombre_cliente=?, @nombre=?,@ubicacion=?, @presupuesto=?, @estado=?')
+        sp = """EXEC dbo.sp_actualizar_proyecto @nombre_cliente=?,@nombre_proyecto=?,@ubicacion=?, @presupuesto=?, @estado=?"""
         param = (self.proyecto.nombre_cliente,self.proyecto.nombre,self.proyecto.ubicacion,self.proyecto.presupuesto,self.proyecto.estado)
         cursor = basedatos.conexion.cursor()
         cursor.execute(sp, param)
-
         resultado = cursor.fetchone()
         cursor.commit()
-
         basedatos.cerrarConexionBD()
         return resultado
-
         
-    def eliminarProducto(self):
+        
+    def eliminarProyecto(self):
         basedatos= ConexionBD()
         basedatos.establecerConexionBD()
         #hacemos la conexion
-        sp = 'exec [dbo].[sp_eliminar_producto] @nombre=?'   
+        sp = 'exec [dbo].[sp_eliminar_proyecto] @nombre=?'   
         param = (self.proyecto.nombre)
         cursor = basedatos.conexion.cursor()
         cursor.execute(sp, param)     
@@ -58,7 +54,7 @@ class ProyectoDAO:
         basedatos.cerrarConexionBD() 
    
 
-    def buscarProyectoPorNombre(self,nombre):
+    def buscarProyectoPorNombre(self, nombre):
         basedatos = ConexionBD()
         basedatos.establecerConexionBD()
 
@@ -66,7 +62,20 @@ class ProyectoDAO:
         cursor = basedatos.conexion.cursor()
         cursor.execute(sp, (nombre,))
 
-        datos = cursor.fetchone()
-
+        row = cursor.fetchone()
         basedatos.cerrarConexionBD()
-        return datos
+
+        if row is None:
+            return None
+
+        proyecto = Proyecto()
+
+        proyecto.id_proyecto = row[0]
+        proyecto.nombre = row[1]
+        proyecto.ubicacion = row[2]
+        proyecto.presupuesto = row[3]
+        proyecto.estado = row[4]
+        proyecto.nombre_cliente = row[5]  # <-- IMPORTANTE
+
+        return proyecto
+

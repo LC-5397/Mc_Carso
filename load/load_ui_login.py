@@ -9,46 +9,39 @@ class Load_ui_login(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("ui/login.ui", self)
 
+        # Configuración de ventana
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setWindowOpacity(1.0)
 
         # Páginas del stackedWidget
         self.page_login = self.findChild(QtWidgets.QWidget, "page_login")
-        self.page_error = self.findChild(QtWidgets.QWidget, "page_password")
-
-        self.stackedWidget.setCurrentWidget(self.page_login)
 
         # Botones
         self.Button_login.clicked.connect(self.ingresar)
         #Cerrar ventana
         #self.boton_salir_login.clicked.connect(lambda: self.close())
-        
+
     # LOGIN
 
     def ingresar(self):
-        usuario = "admin"
-        contrasena = "admin"
+        
+        usuario=self.usuario_login.text().strip()
+        contrasena=self.password_login.text().strip()
         login_dao = LoginDAO()
         valido = login_dao.verificar_usuario(usuario, contrasena)
 
         if valido:
             print("Login correcto. Abriendo menú...")
-
-            # Importación aquí para evitar ciclos entre módulos
-            from load.load_ui_menu import Load_ui_menu
-            self.ventana_menu = Load_ui_menu()  # GUARDA referencia
-            self.ventana_menu.show()
-            self.close()  # CERRAMOS login
+            self.abrir_menu()
         else:
             print("Usuario o contraseña incorrectos.")
-            self.stackedWidget.setCurrentWidget(self.page_error)
-
+            #self.stackedWidget.setCurrentWidget(self.page_error)
 
 
     def abrir_menu(self):
         self.close()
-        from load.load_ui_proyectos import Load_ui_proyectos
-        self.empleados = Load_ui_proyectos()
+        from load.load_ui_proyectos import Load_ui_Proyecto
+        self.empleados = Load_ui_Proyecto()
         self.empleados.show()
 
 
