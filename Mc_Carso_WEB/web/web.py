@@ -1,29 +1,63 @@
 import reflex as rx
+from modelo.usuario_web import UsuarioWEB
+from modelo.usuariodao_web import UsuarioDAO
+from modelo.contacto import Contacto
+from dataclasses import dataclass
+from modelo.proyectodao import ProyectoDAO
 
-# ----- STATE -----
+
+@dataclass
+class Contacto:
+    nombre: str
+    cargo: str
+    correo: str
+
 
 class State(rx.State):
     menu_open: bool = False
-    current_user: str = ""  # Nuevo estado para el usuario
+    current_user: str = ""
+
+    @rx.var
+    def is_logged(self) -> bool:
+        return self.current_user != ""
 
     def toggle_menu(self):
         self.menu_open = not self.menu_open
-    
+
     def set_user(self, username: str):
-        """Función para establecer el usuario desde BD"""
         self.current_user = username
-    
+
+    # Login
     def handle_login(self, form_data: dict):
-        """Maneja el inicio de sesión"""
         username = form_data.get("username", "")
         password = form_data.get("password", "")
-        
-        # Aquí iría tu lógica de autenticación con la base de datos
-        # Por ahora simulamos un login exitoso
-        self.set_user(username)
-        
-        # Redirigir a la página principal después del login
-        return rx.redirect("/")
+        dao = UsuarioDAO()  # <-- crear instancia localmente
+        if dao.verificar_usuario(username, password):
+            self.current_user = username
+            return rx.redirect("/")
+        else:
+            rx.toast.error("Usuario o contraseña incorrectos")
+
+    # Registro
+    def handle_register(self, form_data: dict):
+        print("Datos recibidos del registro:", form_data)
+        nuevo = UsuarioWEB(
+            nombre=form_data.get("fullname", ""),
+            correo=form_data.get("email", ""),
+            clave=form_data.get("password", "")
+        )
+        dao = UsuarioDAO()  # <-- crear instancia localmente
+        resultado = dao.registrar_usuario(nuevo)
+        if resultado:
+            return rx.window_alert("Usuario registrado correctamente")
+        else:
+            return rx.window_alert("No se pudo registrar el usuario")
+
+class ContactoState(State):
+    lista_contactos: list[Contacto] = [
+        Contacto("Juan Pérez", "Ingeniero", "juan@example.com"),
+        Contacto("Ana Gómez", "Arquitecta", "ana@example.com"),
+    ]
 
 # ----- COMPONENTES -----
 
@@ -108,176 +142,317 @@ def navbar() -> rx.Component:
     )
 
 # ----- PÁGINA LOGIN ACTUALIZADA -----
-
 def login() -> rx.Component:
     return rx.box(
         navbar(),
+
         rx.center(
-            rx.vstack(
-                rx.heading(
-                    "Iniciar Sesión",
-                    size="4",
-                    font_weight="bold",
-                    margin_bottom="2rem",
-                    color="#333",
-                ),
-                rx.form(
-                    rx.vstack(
-                        rx.text(
-                            "NOMBRE",
-                            font_weight="bold",
-                            font_size="sm",
-                            align_self="start",
-                            color="#333",
-                        ),
-                        rx.input(
-                            placeholder="Ingresa tu nombre de usuario",
-                            name="username",
-                            width="300px",
-                            border_radius="8px",
-                            border="1px solid #e2e8f0",
-                            padding="0.75rem",
-                            bg="white",
-                        ),
-                        rx.text(
-                            "CLAVE",
-                            font_weight="bold",
-                            font_size="sm",
-                            align_self="start",
-                            margin_top="1rem",
-                            color="#333",
-                        ),
-                        rx.input(
-                            type="password",
-                            placeholder="Ingresa tu contraseña",
-                            name="password",
-                            width="300px",
-                            border_radius="8px",
-                            border="1px solid #e2e8f0",
-                            padding="0.75rem",
-                            bg="white",
-                        ),
-                        rx.hstack(
-                            rx.button(
-                                "Iniciar Sesión",
-                                type="submit",
-                                bg="#87B4FA",
-                                color="black",
-                                border_radius="8px",
-                                padding_x="2rem",
-                                padding_y="0.75rem",
-                                _hover={"bg": "#6a9de0"},
-                            ),
-                            rx.link(
-                                rx.button(
-                                    "Registrarse",
-                                    bg="white",
-                                    color="#87B4FA",
-                                    border="1px solid #87B4FA",
-                                    border_radius="8px",
-                                    padding_x="2rem",
-                                    padding_y="0.75rem",
-                                    _hover={"bg": "#f0f4f8"},
-                                ),
-                                href="/registro",
-                            ),
-                            spacing="4",  # Cambiado de "1rem" a "4"
-                            margin_top="2rem",
-                        ),
-                        spacing="2",  # Cambiado de "0.5rem" a "2"
+            rx.card(
+                rx.vstack(
+                    rx.heading(
+                        "Iniciar Sesión",
+                        size="6",
+                        font_weight="bold",
+                        color="#0A1A4A",
+                        margin_bottom="1rem",
                     ),
-                    on_submit=State.handle_login,
+
+                    rx.form(
+                        rx.vstack(
+
+                            # USUARIO
+                            rx.text(
+                                "NOMBRE",
+                                font_weight="bold",
+                                font_size="sm",
+                                color="#0A1A4A",
+                                align_self="start",
+                            ),
+
+                            rx.hstack(
+                                rx.icon(tag="user", color="#0A1A4A", width="22px"),
+                                rx.input(
+                                    type="text",
+                                    placeholder="Ingresa tu nombre de usuario",
+                                    name="username",
+                                    width="270px",
+                                    border_radius="12px",
+                                    border="1px solid rgba(255,255,255,0.4)",
+                                    padding="0.9rem",
+                                    bg="rgba(255,255,255,0.65)",
+                                    color="black",
+                                    _placeholder={"color": "black"},
+                                    transition="all 0.25s ease",
+                                    _focus={
+                                        "border": "1px solid #3D6FE8",
+                                        "bg": "white",
+                                        "box_shadow": "0 0 10px rgba(93, 139, 255, 0.5)",
+                                    },
+                                ),
+                                spacing="3",
+                            ),
+
+                            # PASSWORD
+                            rx.text(
+                                "CLAVE",
+                                font_weight="bold",
+                                font_size="sm",
+                                color="#0A1A4A",
+                                align_self="start",
+                                margin_top="1rem",
+                            ),
+
+                            rx.hstack(
+                                rx.icon(tag="lock", color="#0A1A4A", width="22px"),
+                                rx.input(
+                                    type="password",
+                                    placeholder="Ingresa tu contraseña",
+                                    name="password",
+                                    width="270px",
+                                    border_radius="12px",
+                                    border="1px solid rgba(255,255,255,0.4)",
+                                    padding="0.9rem",
+                                    bg="rgba(255,255,255,0.65)",
+                                    color="black",
+                                    _placeholder={"color": "black"},
+                                    transition="all 0.25s ease",
+                                    _focus={
+                                        "border": "1px solid #3D6FE8",
+                                        "bg": "white",
+                                        "box_shadow": "0 0 10px rgba(93, 139, 255, 0.5)",
+                                    },
+                                ),
+                                spacing="3",
+                            ),
+
+                            # BOTONES
+                            rx.hstack(
+                                # BOTÓN LOGIN
+                                rx.button(
+                                    "Iniciar Sesión",
+                                    type="submit",
+                                    bg="#5A8DFF",
+                                    color="white",
+                                    border_radius="12px",
+                                    padding_x="2.5rem",
+                                    padding_y="0.9rem",
+                                    font_weight="bold",
+                                    transition="all 0.25s ease",
+                                    _hover={
+                                        "bg": "#3D6FE8",
+                                        "transform": "scale(1.05)",
+                                        "box_shadow": "0 8px 18px rgba(61,111,232,0.4)"
+                                    },
+                                ),
+
+                                # BOTÓN REGISTRO
+                                rx.link(
+                                    rx.button(
+                                        "Registrarse",
+                                        bg="rgba(255,255,255,0.7)",
+                                        color="#5A8DFF",
+                                        border="2px solid #5A8DFF",
+                                        border_radius="12px",
+                                        padding_x="2.5rem",
+                                        padding_y="0.9rem",
+                                        font_weight="bold",
+                                        transition="all 0.25s ease",
+                                        _hover={
+                                            "bg": "#eaf0ff",
+                                            "transform": "scale(1.05)",
+                                            "box_shadow": "0 8px 18px rgba(90,141,255,0.3)"
+                                        },
+                                    ),
+                                    href="/registro",
+                                ),
+
+                                spacing="6",
+                                margin_top="1.5rem",
+                            ),
+
+                            spacing="5",
+                        ),
+
+                        on_submit=State.handle_login,
+                    ),
                 ),
-                align="center",
+
+                # TARJETA GLASMORPHISM PREMIUM
+                padding="3rem",
+                border_radius="22px",
+                width="440px",
+                bg="rgba(255,255,255,0.28)",
+                backdrop_filter="blur(18px)",
+                box_shadow="0 12px 35px rgba(0,0,0,0.18)",
+                border="1px solid rgba(255,255,255,0.4)",
             ),
-            margin_top="120px",
-            min_height="100vh",
-            bg="#CFE7FC",
         ),
+
+        min_height="100vh",
+        bg="#010C42",
+        padding_top="120px",
     )
 
-# ----- PÁGINA REGISTRO -----
 
+# ----- PÁGINA REGISTRO -----
 def registro() -> rx.Component:
     return rx.box(
         navbar(),
+
         rx.center(
-            rx.vstack(
-                rx.heading(
-                    "Registrarse",
-                    size="4",
-                    font_weight="bold",
-                    margin_bottom="2rem",
-                    color="#333",
-                ),
+            rx.card(
                 rx.vstack(
-                    rx.text(
-                        "NOMBRE COMPLETO",
-                        font_weight="bold",
-                        font_size="sm",
-                        align_self="start",
-                        color="#333",
-                    ),
-                    rx.input(
-                        placeholder="Ingresa tu nombre completo",
-                        width="300px",
-                        border_radius="8px",
-                        border="1px solid #e2e8f0",
-                        padding="0.75rem",
-                        bg="white",
-                    ),
-                    rx.text(
-                        "CORREO ELECTRÓNICO",
-                        font_weight="bold",
-                        font_size="sm",
-                        align_self="start",
-                        margin_top="1rem",
-                        color="#333",
-                    ),
-                    rx.input(
-                        placeholder="Ingresa tu correo electrónico",
-                        width="300px",
-                        border_radius="8px",
-                        border="1px solid #e2e8f0",
-                        padding="0.75rem",
-                        bg="white",
-                    ),
-                    rx.text(
-                        "CLAVE",
-                        font_weight="bold",
-                        font_size="sm",
-                        align_self="start",
-                        margin_top="1rem",
-                        color="#333",
-                    ),
-                    rx.input(
-                        type="password",
-                        placeholder="Crea tu contraseña",
-                        width="300px",
-                        border_radius="8px",
-                        border="1px solid #e2e8f0",
-                        padding="0.75rem",
-                        bg="white",
-                    ),
-                    rx.button(
+                    rx.heading(
                         "Crear Cuenta",
-                        bg="#87B4FA",
-                        color="black",
-                        border_radius="8px",
-                        padding_x="2rem",
-                        padding_y="0.75rem",
-                        _hover={"bg": "#6a9de0"},
-                        margin_top="2rem",
+                        size="6",
+                        font_weight="bold",
+                        color="#0A1A4A",
+                        margin_bottom="1rem",
                     ),
-                    spacing="2",  # Cambiado de "0.5rem" a "2"
+
+                    rx.form(
+                        rx.vstack(
+
+                            # ------------------- NOMBRE -------------------
+                            rx.text(
+                                "NOMBRE COMPLETO",
+                                font_weight="bold",
+                                font_size="sm",
+                                color="#0A1A4A",
+                                align_self="start",
+                            ),
+
+                            rx.hstack(
+                                rx.icon(tag="user", color="#0A1A4A", width="22px"),
+                                rx.input(
+                                    type="text",
+                                    placeholder="Ingresa tu nombre completo",
+                                    name="fullname",
+                                    width="270px",
+                                    border_radius="12px",
+                                    border="1px solid rgba(255,255,255,0.4)",
+                                    padding="0.9rem",
+                                    bg="rgba(255,255,255,0.65)",
+                                    color="black",
+                                    _placeholder={"color": "black"},
+                                    transition="all 0.25s ease",
+                                    _focus={
+                                        "border": "1px solid #3D6FE8",
+                                        "bg": "white",
+                                        "box_shadow": "0 0 10px rgba(93, 139, 255, 0.5)",
+                                    },
+                                ),
+                                spacing="3",
+                            ),
+
+                            # ------------------- CORREO -------------------
+                            rx.text(
+                                "CORREO ELECTRÓNICO",
+                                font_weight="bold",
+                                font_size="sm",
+                                color="#0A1A4A",
+                                align_self="start",
+                                margin_top="1rem",
+                            ),
+
+                            rx.hstack(
+                                rx.icon(tag="mail", color="#0A1A4A", width="22px"),
+                                rx.input(
+                                    type="email",
+                                    placeholder="Ingresa tu correo electrónico",
+                                    name="email",
+                                    width="270px",
+                                    border_radius="12px",
+                                    border="1px solid rgba(255,255,255,0.4)",
+                                    padding="0.9rem",
+                                    bg="rgba(255,255,255,0.65)",
+                                    color="black",
+                                    _placeholder={"color": "black"},
+                                    transition="all 0.25s ease",
+                                    _focus={
+                                        "border": "1px solid #3D6FE8",
+                                        "bg": "white",
+                                        "box_shadow": "0 0 10px rgba(93, 139, 255, 0.5)",
+                                    },
+                                ),
+                                spacing="3",
+                            ),
+
+                            # ------------------- CONTRASEÑA -------------------
+                            rx.text(
+                                "CLAVE",
+                                font_weight="bold",
+                                font_size="sm",
+                                color="#0A1A4A",
+                                align_self="start",
+                                margin_top="1rem",
+                            ),
+
+                            rx.hstack(
+                                rx.icon(tag="lock", color="#0A1A4A", width="22px"),
+                                rx.input(
+                                    type="password",
+                                    placeholder="Crea tu contraseña",
+                                    name="password",
+                                    width="270px",
+                                    border_radius="12px",
+                                    border="1px solid rgba(255,255,255,0.4)",
+                                    padding="0.9rem",
+                                    bg="rgba(255,255,255,0.65)",
+                                    color="black",
+                                    _placeholder={"color": "black"},
+                                    transition="all 0.25s ease",
+                                    _focus={
+                                        "border": "1px solid #3D6FE8",
+                                        "bg": "white",
+                                        "box_shadow": "0 0 10px rgba(93, 139, 255, 0.5)",
+                                    },
+                                ),
+                                spacing="3",
+                            ),
+
+                            # ------------------- BOTÓN -------------------
+                            rx.button(
+                                "Crear Cuenta",
+                                type="submit",
+                                bg="#5A8DFF",
+                                color="white",
+                                border_radius="12px",
+                                padding_x="2.5rem",
+                                padding_y="0.9rem",
+                                font_weight="bold",
+                                margin_top="2rem",
+                                transition="all 0.25s ease",
+                                _hover={
+                                    "bg": "#3D6FE8",
+                                    "transform": "scale(1.05)",
+                                    "box_shadow": "0 8px 18px rgba(61,111,232,0.4)",
+                                },
+                            ),
+
+                            spacing="5",
+                        ),
+
+                        on_submit=State.handle_register,  # <-- tú pones tu función
+                    ),
                 ),
-                align="center",
+
+                # TARJETA glass premium
+                padding="3rem",
+                border_radius="22px",
+                width="440px",
+                bg="rgba(255,255,255,0.28)",
+                backdrop_filter="blur(18px)",
+                box_shadow="0 12px 35px rgba(0,0,0,0.18)",
+                border="1px solid rgba(255,255,255,0.4)",
             ),
-            margin_top="120px",
-            min_height="100vh",
-            bg="#CFE7FC",
         ),
+
+        min_height="100vh",
+        bg="#010C42",
+        padding_top="120px",
     )
+
 
 # ----- PÁGINA PRINCIPAL -----
 def index() -> rx.Component:
@@ -337,19 +512,474 @@ def index() -> rx.Component:
         bg="#CFE7FC",
     )
 
-# ----- OTRAS PÁGINAS -----
-
+# ----- PÁGINA DE SERVICIOS -----
 def servicios() -> rx.Component:
-    return rx.box(navbar(), rx.text("Servicios", margin_top="120px"))
+    return rx.box(
+        navbar(),  # Navbar ya existente
+
+        # ----- SECCIÓN PRINCIPAL (texto + imágenes) -----
+        rx.box(
+            rx.hstack(
+                # ----- TEXTO (lado izquierdo) -----
+                rx.box(
+                    rx.text(
+                        """
+                        En Grupo Carso, nuestros servicios están diseñados para impulsar el crecimiento, 
+                        la innovación y la eficiencia en sectores estratégicos para México y Latinoamérica. 
+                        A través de nuestras distintas divisiones, ofrecemos soluciones integrales en energía, 
+                        construcción, telecomunicaciones, infraestructura y servicios industriales, siempre con 
+                        un enfoque en la calidad, la seguridad y el desarrollo sostenible.
+
+                        Nuestro compromiso es brindar proyectos de alto impacto que generen valor social y 
+                        económico, respaldados por equipos especializados, tecnología de vanguardia y décadas 
+                        de experiencia operativa. Cada servicio que ofrecemos refleja nuestra visión de contribuir 
+                        al progreso y al fortalecimiento de las comunidades donde operamos.
+                        """,
+                        font_size="20px",
+                        color="#333",
+                        text_align="justify",
+                    ),
+                    width="50%",
+                    padding="20px",
+                ),
+
+                # ----- IMÁGENES (lado derecho) -----
+                rx.box(
+                    rx.vstack(
+                        rx.image(
+                            src="/servicios1.jpg",
+                            width="100%",
+                            height="200px",
+                            object_fit="cover",
+                            border_radius="12px",
+                        ),
+                        rx.image(
+                            src="/servicios2.jpeg",
+                            width="100%",
+                            height="200px",
+                            object_fit="cover",
+                            border_radius="12px",
+                        ),
+                        rx.image(
+                            src="/servicios3.webp",
+                            width="100%",
+                            height="200px",
+                            object_fit="cover",
+                            border_radius="12px",
+                        ),
+                        spacing="5",   # ← CORREGIDO
+                        width="100%",
+                    ),
+                    width="50%",
+                    padding="20px",
+                ),
+
+                align="center",
+                justify="center",
+                spacing="5",
+                width="100%",
+            ),
+
+            padding="120px 20px",
+            bg="white",
+        ),
+
+        # ----------- NUEVA SECCIÓN: SERVICIOS DE CONSTRUCCIÓN -----------
+        rx.box(
+            rx.vstack(
+                rx.text(
+                    "Servicios de la División de Construcción",
+                    font_size="30px",
+                    font_weight="bold",
+                    color="#222",
+                    margin_bottom="20px",
+                ),
+
+                rx.text(
+                    "Nuestra división de construcción ofrece soluciones integrales con altos estándares técnicos y operativos:",
+                    font_size="18px",
+                    color="#444",
+                    text_align="center",
+                    width="85%",
+                    margin_bottom="30px",
+                ),
+
+                # --- TARJETAS DE SERVICIOS ---
+                rx.grid(
+                    # Servicio 1
+                    rx.box(
+                        rx.vstack(
+                            rx.text(
+                                "• Construcción de Infraestructura",
+                                font_size="20px",
+                                font_weight="bold",
+                                color="#222",
+                                margin_bottom="10px",
+                            ),
+                            rx.text(
+                                "Carreteras, puentes, túneles, presas y obras que impulsan la movilidad y el desarrollo regional.",
+                                color="#555",
+                                text_align="justify",
+                            ),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border_radius="12px",
+                        border="1px solid #DDD",
+                        bg="white",
+                    ),
+
+                    # Servicio 2
+                    rx.box(
+                        rx.vstack(
+                            rx.text(
+                                "• Construcción Industrial",
+                                color="#222",
+                                font_size="20px",
+                                font_weight="bold",
+                                margin_bottom="10px",
+                            ),
+                            rx.text(
+                                "Plantas, parques industriales, naves y obras especializadas para sectores productivos.",
+                                color="#555",
+                                text_align="justify",
+                            ),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border_radius="12px",
+                        border="1px solid #DDD",
+                        bg="white",
+                    ),
+
+                    # Servicio 3
+                    rx.box(
+                        rx.vstack(
+                            rx.text(
+                                "• Urbanización y Obra Civil",
+                                font_size="20px",
+                                color="#222",
+                                font_weight="bold",
+                                margin_bottom="10px",
+                            ),
+                            rx.text(
+                                "Desarrollo de fraccionamientos, cimentación, drenaje, pavimentación y servicios básicos.",
+                                color="#555",
+                                text_align="justify",
+                            ),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border_radius="12px",
+                        border="1px solid #DDD",
+                        bg="white",
+                    ),
+
+                    # Servicio 4
+                    rx.box(
+                        rx.vstack(
+                            rx.text(
+                                "• Supervisión y Gestión de Proyectos",
+                                font_size="20px",
+                                color="#222",
+                                font_weight="bold",
+                                margin_bottom="10px",
+                            ),
+                            rx.text(
+                                "Administración, control de obra, evaluación técnica y aseguramiento de calidad.",
+                                color="#555",
+                                text_align="justify",
+                            ),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border_radius="12px",
+                        border="1px solid #DDD",
+                        bg="white",
+                    ),
+
+                    # Servicio 5
+                    rx.box(
+                        rx.vstack(
+                            rx.text(
+                                "• Instalaciones Eléctricas e Hidráulicas",
+                                font_size="20px",
+                                color="#222",
+                                font_weight="bold",
+                                margin_bottom="10px",
+                            ),
+                            rx.text(
+                                "Montaje de redes, sistemas de agua potable, alcantarillado y cableado industrial.",
+                                color="#555",
+                                text_align="justify",
+                            ),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border_radius="12px",
+                        border="1px solid #DDD",
+                        bg="white",
+                    ),
+
+                    columns="2",
+                    spacing="5",   # ← CORREGIDO
+                    width="85%",
+                    margin="0 auto",
+                ),
+
+                spacing="5",
+                align="center",
+                padding_bottom="40px",
+            ),
+
+            bg="#F7F7F7",
+            padding="50px 20px",
+        ),
+
+        width="100%",
+        height="100%",
+        bg="#CFE7FC",
+    )
+
+
+# ----- PÁGINA DE PROYECTOS -----
+def obtener_proyectos(limit=10):
+    dao = ProyectoDAO()
+    datos = dao.listarProyectos()
+    return datos[:limit]
 
 def proyectos() -> rx.Component:
-    return rx.box(navbar(), rx.text("Proyectos", margin_top="120px"))
+    proyectos_bd = obtener_proyectos(10)  # Traemos 10 proyectos
+    color_navbar = "#0D6EFD"  # Color azul de la navbar
 
+    return rx.box(
+        navbar(),  # Navbar ya existente
+
+        rx.box(
+            rx.vstack(
+                # ----- TÍTULO ----- 
+                rx.text(
+                    "Proyectos Destacados",
+                    font_size="32px",
+                    font_weight="bold",
+                    color="#222",
+                    margin_bottom="20px",
+                ),
+
+                # ----- PÁRRAFO INTRODUCTORIO -----
+                rx.text(
+                    """
+                    En Grupo Carso hemos desarrollado proyectos de gran escala que contribuyen al
+                    crecimiento económico y social del país. Cada iniciativa combina innovación,
+                    infraestructura sólida y un enfoque estratégico que garantiza resultados tangibles.
+                    Estos proyectos reflejan nuestro compromiso con la calidad, la eficiencia y la
+                    responsabilidad hacia las comunidades donde operamos.
+                    """,
+                    font_size="20px",
+                    color="#333",
+                    text_align="justify",
+                    width="85%",
+                ),
+
+                spacing="4",
+                align="center",
+                padding_bottom="20px",
+            ),
+
+            # ----- GALERÍA DE PROYECTOS (3 COLUMNAS) -----
+            rx.grid(
+                rx.box(
+                    rx.image(
+                        src="/construccion_infraestructura.jpg",
+                        width="100%",
+                        height="220px",
+                        object_fit="cover",
+                        border_radius="12px",
+                    ),
+                    rx.text(
+                        "Infraestructura y Construcción",
+                        font_weight="bold",
+                        margin_top="10px",
+                        font_size="18px",
+                        color="black",
+                    ),
+                    rx.text(
+                        "Desarrollo de carreteras, puentes y obras que impulsan la conectividad nacional.",
+                        text_align="justify",
+                        color="black",
+                    ),
+                    padding="15px",
+                ),
+                rx.box(
+                    rx.image(
+                        src="/energia.png",
+                        width="100%",
+                        height="220px",
+                        object_fit="cover",
+                        border_radius="12px",
+                    ),
+                    rx.text(
+                        "Energía y Telecomunicaciones",
+                        font_weight="bold",
+                        margin_top="10px",
+                        font_size="18px",
+                        color="black",
+                    ),
+                    rx.text(
+                        "Implementación de soluciones que fortalecen la red energética y digital del país.",
+                        text_align="justify",
+                        color="black",
+                    ),
+                    padding="15px",
+                ),
+                rx.box(
+                    rx.image(
+                        src="/industrial.webp",
+                        width="100%",
+                        height="220px",
+                        object_fit="cover",
+                        border_radius="12px",
+                    ),
+                    rx.text(
+                        "Desarrollo Industrial",
+                        font_weight="bold",
+                        margin_top="10px",
+                        font_size="18px",
+                        color="black",
+                    ),
+                    rx.text(
+                        "Proyectos industriales eficientes que impulsan la competitividad y el crecimiento.",
+                        text_align="justify",
+                        color="black",
+                    ),
+                    padding="15px",
+                ),
+
+                columns="3",
+                spacing="4",
+                width="90%",
+                margin="0 auto",
+            ),
+
+            # ----- TABLA SIMULADA DE PROYECTOS ----- 
+            rx.vstack(
+                rx.text(
+                    "Otros Proyectos",
+                    font_size="28px",
+                    font_weight="bold",
+                    color="#222",
+                    margin_top="40px",
+                    margin_bottom="20px",
+                ),
+
+                # Encabezado con barra azul
+                rx.grid(
+                    rx.text("Nombre del Proyecto", font_weight="bold", color="white"),
+                    columns="1",
+                    width="90%",
+                    margin="0 auto",
+                    bg=color_navbar,
+                    padding="10px",
+                    border_radius="6px 6px 0 0",
+                ),
+
+                # Filas de proyectos con texto negro
+                *[
+                    rx.grid(
+                        rx.text(proyecto[2], color="black"),  # Nombre del proyecto en negro
+                        columns="1",
+                        width="90%",
+                        margin="0 auto",
+                        padding="8px",
+                        border_bottom="1px solid #ccc",
+                        bg="#f9f9f9",  # Fondo ligeramente gris para resaltar el texto
+                    )
+                    for proyecto in proyectos_bd
+                ],
+            ),
+
+            padding="120px 20px",
+            bg="white",
+        ),
+
+        width="100%",
+        height="100%",
+        bg="#CFE7FC",
+    )
+
+# --- PÁGINA DE CONTACTO ---
 def contacto() -> rx.Component:
-    return rx.box(navbar(), rx.text("Contacto", margin_top="120px"))
+    return rx.vstack(
+        pagina_contacto()
+    )
 
 
+def pagina_contacto() -> rx.Component:
+    return rx.box(
+        navbar(),
 
+        # ----- ENCABEZADO ----- 
+        rx.box(
+            rx.vstack(
+                rx.text(
+                    "Contactos del Equipo Técnico",
+                    font_size="32px",
+                    font_weight="bold",
+                    color="#222",
+                    margin_bottom="10px",
+                ),
+                rx.text(
+                    """
+                    Aquí encontrarás la lista del personal técnico disponible, incluyendo arquitectos e ingenieros.
+                    Esta información será cargada dinámicamente desde la base de datos.
+                    """,
+                    font_size="18px",
+                    color="#444",
+                    text_align="center",
+                    width="80%",
+                ),
+                spacing="7",
+                align="center",
+                padding_bottom="20px",
+            ),
+            padding="120px 20px 40px 20px",
+            bg="white",
+        ),
+
+        # ----- CONTENEDOR DE CONTACTOS -----
+        rx.box(
+            rx.vstack(
+                rx.foreach(
+                    ContactoState.lista_contactos,  # lista de contactos
+                    lambda contacto: rx.box(
+                        rx.vstack(
+                            rx.text(contacto.nombre, font_size="20px", font_weight="bold"),
+                            rx.text(contacto.cargo, font_size="16px", color="#555"),
+                            rx.text(contacto.correo, font_size="16px", color="#2A6F97"),
+                            spacing="3",
+                        ),
+                        padding="20px",
+                        border="1px solid #DDD",
+                        border_radius="12px",
+                        bg="white",
+                        width="80%",
+                        margin="0 auto",
+                    )
+                ),
+                spacing="7",
+                width="100%",
+                align="center",
+            ),
+            bg="#F5F5F5",
+            padding="40px 0",
+        ),
+
+        width="100%",
+        height="100%",
+        bg="#CFE7FC",
+    )
+
+# ----- APP -----
 app = rx.App()
 app.add_page(index, route="/")
 app.add_page(login, route="/login")
