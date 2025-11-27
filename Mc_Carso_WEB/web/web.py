@@ -185,7 +185,6 @@ def login() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="user", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type="text",
                                     placeholder="Ingresa tu nombre de usuario",
                                     name="username",
                                     width="270px",
