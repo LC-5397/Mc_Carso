@@ -2,12 +2,11 @@ import reflex as rx
 from modelo.usuario_web import UsuarioWEB
 from modelo.usuariodao_web import UsuarioDAO
 from modelo.contacto import Contacto
-from dataclasses import dataclass
 from modelo.proyectodao import ProyectoDAO
+from modelo.contactodao import ContactoDAO
 
 
-@dataclass
-class Contacto:
+class Contacto(rx.Base):
     nombre: str
     cargo: str
     correo: str
@@ -53,11 +52,25 @@ class State(rx.State):
         else:
             return rx.window_alert("No se pudo registrar el usuario")
 
-class ContactoState(State):
-    lista_contactos: list[Contacto] = [
-        Contacto("Juan Pérez", "Ingeniero", "juan@example.com"),
-        Contacto("Ana Gómez", "Arquitecta", "ana@example.com"),
-    ]
+class ContactoState(rx.State):
+    lista_contactos: list[Contacto] = []
+
+    def cargar_contactos(self):
+        from modelo.contactodao import ContactoDAO
+
+        dao = ContactoDAO()
+        datos = dao.obtener_contactos()
+
+        # datos YA es una lista de objetos Contacto
+        self.lista_contactos = [
+            Contacto(
+                nombre=c.nombre,
+                cargo=c.cargo,
+                correo=c.correo
+            )
+            for c in datos
+        ]
+
 
 # ----- COMPONENTES -----
 
@@ -325,7 +338,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="user", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type="text",
+                                    type_="text",
                                     placeholder="Ingresa tu nombre completo",
                                     name="fullname",
                                     width="270px",
@@ -358,7 +371,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="mail", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type="email",
+                                    type_="text",   
                                     placeholder="Ingresa tu correo electrónico",
                                     name="email",
                                     width="270px",
@@ -367,7 +380,7 @@ def registro() -> rx.Component:
                                     padding="0.9rem",
                                     bg="rgba(255,255,255,0.65)",
                                     color="black",
-                                    _placeholder={"color": "black"},
+                                    _placeholder={"color": "#6b7280"},
                                     transition="all 0.25s ease",
                                     _focus={
                                         "border": "1px solid #3D6FE8",
@@ -391,7 +404,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="lock", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type="password",
+                                    type_="password",
                                     placeholder="Crea tu contraseña",
                                     name="password",
                                     width="270px",
@@ -433,11 +446,10 @@ def registro() -> rx.Component:
                             spacing="5",
                         ),
 
-                        on_submit=State.handle_register,  # <-- tú pones tu función
+                        on_submit=State.handle_register,
                     ),
                 ),
 
-                # TARJETA glass premium
                 padding="3rem",
                 border_radius="22px",
                 width="440px",
@@ -452,7 +464,6 @@ def registro() -> rx.Component:
         bg="#010C42",
         padding_top="120px",
     )
-
 
 # ----- PÁGINA PRINCIPAL -----
 def index() -> rx.Component:
@@ -732,7 +743,7 @@ def servicios() -> rx.Component:
                 padding_bottom="40px",
             ),
 
-            bg="#F7F7F7",
+            bg="#B7D1FF",
             padding="50px 20px",
         ),
 
@@ -910,7 +921,8 @@ def proyectos() -> rx.Component:
 # --- PÁGINA DE CONTACTO ---
 def contacto() -> rx.Component:
     return rx.vstack(
-        pagina_contacto()
+        pagina_contacto(),
+        on_mount=ContactoState.cargar_contactos
     )
 
 
@@ -918,7 +930,7 @@ def pagina_contacto() -> rx.Component:
     return rx.box(
         navbar(),
 
-        # ----- ENCABEZADO ----- 
+        # ENCABEZADO
         rx.box(
             rx.vstack(
                 rx.text(
@@ -929,10 +941,7 @@ def pagina_contacto() -> rx.Component:
                     margin_bottom="10px",
                 ),
                 rx.text(
-                    """
-                    Aquí encontrarás la lista del personal técnico disponible, incluyendo arquitectos e ingenieros.
-                    Esta información será cargada dinámicamente desde la base de datos.
-                    """,
+                    "Aquí encontrarás la lista del personal técnico disponible.",
                     font_size="18px",
                     color="#444",
                     text_align="center",
@@ -940,33 +949,34 @@ def pagina_contacto() -> rx.Component:
                 ),
                 spacing="7",
                 align="center",
-                padding_bottom="20px",
             ),
             padding="120px 20px 40px 20px",
             bg="white",
         ),
 
-        # ----- CONTENEDOR DE CONTACTOS -----
+        # TARJETAS DE CONTACTOS
         rx.box(
             rx.vstack(
                 rx.foreach(
-                    ContactoState.lista_contactos,  # lista de contactos
+                    ContactoState.lista_contactos,
                     lambda contacto: rx.box(
                         rx.vstack(
                             rx.text(contacto.nombre, font_size="20px", font_weight="bold"),
                             rx.text(contacto.cargo, font_size="16px", color="#555"),
-                            rx.text(contacto.correo, font_size="16px", color="#2A6F97"),
+                            rx.text(contacto.correo, font_size="15px", color="#2A6F97"),
                             spacing="3",
+                            color="black",
                         ),
                         padding="20px",
                         border="1px solid #DDD",
                         border_radius="12px",
-                        bg="white",
+                        bg="#C4E4FF",
                         width="80%",
                         margin="0 auto",
+                        colr="black",
                     )
                 ),
-                spacing="7",
+                spacing="7",    
                 width="100%",
                 align="center",
             ),
@@ -975,7 +985,6 @@ def pagina_contacto() -> rx.Component:
         ),
 
         width="100%",
-        height="100%",
         bg="#CFE7FC",
     )
 
