@@ -338,7 +338,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="user", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type_="text",
+                                    type="text",
                                     placeholder="Ingresa tu nombre completo",
                                     name="fullname",
                                     width="270px",
@@ -371,7 +371,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="mail", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type_="text",   
+                                    type="text",   
                                     placeholder="Ingresa tu correo electrónico",
                                     name="email",
                                     width="270px",
@@ -404,7 +404,7 @@ def registro() -> rx.Component:
                             rx.hstack(
                                 rx.icon(tag="lock", color="#0A1A4A", width="22px"),
                                 rx.input(
-                                    type_="password",
+                                    type="password",
                                     placeholder="Crea tu contraseña",
                                     name="password",
                                     width="270px",
