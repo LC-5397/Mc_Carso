@@ -6,7 +6,7 @@ class ClientesDAO:
         self.bd = ConexionBD()
         self.clientes= Clientes()
 
-    def listarProyectos(self):
+    def listarClientes(self):
             basedatos = ConexionBD()
             basedatos.establecerConexionBD()
             sp = "EXEC dbo.sp_listar_clientes"
