@@ -115,7 +115,7 @@ QLineEdit:focus {
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>imagenes/cursor.png</normaloff>imagenes/cursor.png</iconset>
+           <normaloff>../resources/imagenes/menu/cursor.png</normaloff>../resources/imagenes/menu/cursor.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -224,29 +224,6 @@ QLineEdit:focus {
          </property>
         </spacer>
        </item>
-       <item>
-        <widget class="QPushButton" name="boton_salida">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>35</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Salida</string>
-         </property>
-         <property name="icon">
-          <iconset>
-           <normaloff>imagenes/salir.png</normaloff>imagenes/salir.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -302,7 +279,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/user.png</normaloff>imagenes/user.png</iconset>
+              <normaloff>../resources/imagenes/menu/user.png</normaloff>../resources/imagenes/menu/user.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -319,7 +296,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/meeting.png</normaloff>imagenes/meeting.png</iconset>
+              <normaloff>../resources/imagenes/menu/meeting.png</normaloff>../resources/imagenes/menu/meeting.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -336,7 +313,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/business.png</normaloff>imagenes/business.png</iconset>
+              <normaloff>../resources/imagenes/menu/business.png</normaloff>../resources/imagenes/menu/business.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -353,7 +330,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/maintenance.png</normaloff>imagenes/maintenance.png</iconset>
+              <normaloff>../resources/imagenes/menu/maintenance.png</normaloff>../resources/imagenes/menu/maintenance.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -370,7 +347,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/risk-mitigation.png</normaloff>imagenes/risk-mitigation.png</iconset>
+              <normaloff>../resources/imagenes/menu/risk-mitigation.png</normaloff>../resources/imagenes/menu/risk-mitigation.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -387,7 +364,7 @@ QLineEdit:focus {
             </property>
             <property name="icon">
              <iconset>
-              <normaloff>imagenes/patient.png</normaloff>imagenes/patient.png</iconset>
+              <normaloff>../resources/imagenes/menu/patient.png</normaloff>../resources/imagenes/menu/patient.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -415,7 +392,7 @@ QLineEdit:focus {
              <enum>QFrame::Plain</enum>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="page_incidentes">
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -549,7 +526,7 @@ QLineEdit:focus {
                  <string/>
                 </property>
                 <property name="pixmap">
-                 <pixmap>Construccio╠ün.png</pixmap>
+                 <pixmap>../resources/imagenes/menu/Construccio╠ün.png</pixmap>
                 </property>
                 <property name="scaledContents">
                  <bool>true</bool>

@@ -12,13 +12,12 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
         super().__init__()
         # 1.- Cargar archivo .ui
         # Asegúrate de que el nombre del archivo coincida con el que guardaste
-        uic.loadUi("ui/menu.ui", self) 
+        uic.loadUi("ui/ui_menu.ui", self) 
         
         # 2.- Configuración de Ventana (Sin bordes y transparencia)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setWindowOpacity(1)
         
-        # 3.- Inicializar DAOs (Ejemplo)
         self.usuario_dao = UsuarioDAO()
         self.cliente_dao = ClientesDAO()
         self.empleado_dao = EmpleadosDAO()
@@ -45,7 +44,7 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
 
         # 6.- Conectar Botones de Acción (Actualizar, Salir, etc)
         # Botón Salida 
-        self.boton_salida.clicked.connect(self.close)
+        #self.boton_salida.clicked.connect(self.close)
         
         # Botón Anterior (Podría usarse para minimizar o volver atrás) 
         self.boton_anterior.clicked.connect(self.showMinimized)
@@ -85,7 +84,7 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
 
     # --- MÉTODOS PARA LLENAR TABLAS ---
     def llenar_tabla_clientes(self):
-        datos = self.clientedao.listarClientes() 
+        datos = self.cliente_dao.listarClientes() 
         self.tabla_clientes.setRowCount(len(datos))
         fila = 0
         for item in datos:
@@ -96,7 +95,7 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             fila += 1
 
     def llenar_tabla_empleados(self):
-        datos = self.empleadodao.listarEmpleados()
+        datos = self.empleado_dao.listarEmpleados()
         self.tabla_empleados.setRowCount(len(datos))
         fila = 0
         for item in datos:
@@ -107,7 +106,7 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             fila += 1
 
     def llenar_tabla_proveedores(self):
-        datos = self.proveedordao.listarProveedores()
+        datos = self.proveedor_dao.listarProveedores()
         self.tableWidget.setRowCount(len(datos))
         fila = 0
         for item in datos:
@@ -117,7 +116,7 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             fila += 1
 
     def llenar_tabla_incidentes(self):
-        datos = self.incidentedao.listarIncidentes()
+        datos = self.incidente_dao.listarIncidentes()
         self.tabla_incidentes.setRowCount(len(datos))
         fila = 0
         for item in datos:
@@ -128,14 +127,12 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             fila += 1
 
     def llenar_tabla_usuario_proyectos(self):
-        datos = self.proyectodao.listarProyectosUsuario()
+        datos = self.usuario_dao.listarUsuario()
         self.tableWidget_2.setRowCount(len(datos))
         fila = 0
         for item in datos:
-            self.tableWidget_2.setItem(fila, 0, QtWidgets.QTableWidgetItem(str(item[1]))) # Proyecto
-            self.tableWidget_2.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(item[2]))) # Cliente
-            self.tableWidget_2.setItem(fila, 2, QtWidgets.QTableWidgetItem(str(item[3]))) # Presupuesto
-            self.tableWidget_2.setItem(fila, 3, QtWidgets.QTableWidgetItem(str(item[4]))) # Estado
+            self.tableWidget_2.setItem(fila, 0, QtWidgets.QTableWidgetItem(str(item[1]))) # Usuario
+            self.tableWidget_2.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(item[2]))) # Password
             fila += 1
 
     def abrir_modulo_proyectos(self):

@@ -40,8 +40,8 @@ class Load_ui_login(QtWidgets.QMainWindow):
 
     def abrir_menu(self):
         self.close()
-        from load.load_ui_proyectos import Load_ui_Proyecto
-        self.empleados = Load_ui_Proyecto()
+        from load.load_ui_menu import Load_ui_Menu
+        self.empleados = Load_ui_Menu()
         self.empleados.show()
 
 
