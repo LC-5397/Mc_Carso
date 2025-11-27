@@ -6,15 +6,135 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>942</width>
-    <height>689</height>
+    <width>722</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">/* ======== GENERAL ======== */ QMainWindow { background-color: #f5f8ff; /* Fondo azul muy claro */ } QFrame { background-color: #ffffff; border-radius: 8px; } /* ======== MENÚ LATERAL ======== */ #frame_botones_menu { background-color: #0d1b4c; /* Azul oscuro elegante */ border-top-right-radius: 12px; border-bottom-right-radius: 12px; } #frame_paginas { background-color: #f5f8ff; } /* ======== BOTONES GENERALES ======== */ QPushButton { background-color: #e6ecff; border: 1px solid #0d1b4c; border-radius: 6px; padding: 6px 12px; color: #0d1b4c; font: bold 9pt &quot;Segoe UI&quot;; } QPushButton:hover { background-color: #b8c8ff; border: 1px solid #233d91; } QPushButton:pressed { background-color: #0d1b4c; color: #ffffff; } /* ======== BOTONES DEL MENÚ ======== */ #boton_proyectos, #boton_agregar, #boton_actualizar, #boton_eliminar, #boton_salir { background-color: transparent; border: none; color: #f5f8ff; font: bold 9pt &quot;Segoe UI&quot;; text-align: left; padding: 6px 10px; } #boton_proyectos:hover, #boton_agregar:hover, #boton_actualizar:hover, #boton_eliminar:hover, #boton_salir:hover { background-color: #233d91; border-left: 4px solid #f5f8ff; } /* ======== CAMPOS DE TEXTO ======== */ QLineEdit { background-color: #ffffff; border: 1px solid #8ea8ff; border-radius: 4px; padding: 4px; color: #0d1b4c; selection-background-color: #0d1b4c; selection-color: #ffffff; } QLineEdit:focus { border: 1px solid #0d1b4c; } /* ======== LABELS ======== */ QLabel { color: #0d1b4c; font: 9pt &quot;Segoe UI&quot;; } /* ======== BOTÓN PRINCIPAL (ej. Agregar) ======== */ #boton_agregar_agregar, #boton_actualizar_actualizar, #boton_eliminar_eliminar{ background-color: #0d1b4c; color: white; border-radius: 10px; padding: 6px 18px; font: bold 10pt &quot;Segoe UI&quot;; } #boton_agregar_agregar:hover { background-color: #233d91; } #boton_agregar_agregar:pressed { background-color: #001a66; } /* ======== STACKED WIDGET ======== */ QStackedWidget { background-color: #f5f8ff; } /* ======== TÍTULO SUPERIOR ======== */ #label { font: bold 12pt &quot;Segoe UI&quot;; color: #0d1b4c; background-color: transparent; }</string>
+   <string notr="true">/* ============================
+   ======== GENERAL ===========
+   ============================ */
+
+QMainWindow {
+    background-color: #E3EFFA; /* Fondo azul muy claro */
+}
+
+QFrame {
+    background-color: #E3EFFA;
+    border-radius: 8px;
+}
+
+QLabel {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+QLineEdit {
+    background-color: #ffffff;
+    border: 2px solid #aac9d6;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #0d1b4c;
+}
+
+QLineEdit:focus {
+    border: 2px solid #3b6ea5;
+    background-color: #ffffff;
+}
+
+/* ============================
+   ======== BOTONES ===========
+   ============================ */
+
+QPushButton {
+    background-color: #0d1b4c;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+QPushButton:hover {
+    background-color: #152a78;
+}
+
+QPushButton:pressed {
+    background-color: #0a1438;
+}
+
+/* ============================
+   ===== MENÚ LATERAL =========
+   ============================ */
+
+#frame_botones_menu {
+    background-color: #0d1b4c; /* Azul oscuro */
+    border-radius: 0px;
+}
+
+#label_menu {
+    color: #0d1b4c;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ============================
+   === TABLAS (si usas) =======
+   ============================ */
+
+QTableWidget {
+    background-color: #ffffff;
+    border: 1px solid #aac9d6;
+    gridline-color: #c1d7e3;
+    font-size: 14px;
+}
+
+QHeaderView::section {
+    background-color: #0d1b4c;
+    color: white;
+    padding: 6px;
+    border: none;
+    font-weight: bold;
+}
+
+/* ============================
+   === PÁGINA DE DETALLES =====
+   ============================ */
+
+#page_detalle_proyecto {
+    background-color: #CFE4FA; /* Fondo azul suave */
+    border-radius: 8px;
+}
+
+/* LineEdit de detalles */
+
+#nombre_detalles,
+#ubicacion_detalles,
+#cliente_detalles,
+#presupuesto_detalles,
+#estado_detalles,
+#descripcion_detalles {
+    background-color: #ffffff;
+    border: 2px solid #aac9d6;
+    padding: 6px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #0d1b4c;
+}
+
+#nombre_detalles:focus,
+#ubicacion_detalles:focus,
+#cliente_detalles:focus,
+#presupuesto_detalles:focus,
+#estado_detalles:focus,
+#descripcion_detalles:focus {
+    border: 2px solid #3b6ea5;
+}
+
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,9">
@@ -40,7 +160,7 @@
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../../../../.designer/resources/imagenes/proyectos/menu.png</normaloff>../../../../.designer/resources/imagenes/proyectos/menu.png</iconset>
+           <normaloff>../resources/imagenes/proyectos/menu.png</normaloff>../resources/imagenes/proyectos/menu.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -67,23 +187,21 @@
         <widget class="QLabel" name="label_menu">
          <property name="minimumSize">
           <size>
-           <width>100</width>
+           <width>200</width>
            <height>50</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>100</width>
+           <width>300</width>
            <height>50</height>
           </size>
          </property>
          <property name="font">
           <font>
-           <family>Segoe UI</family>
-           <pointsize>9</pointsize>
-           <weight>50</weight>
-           <italic>false</italic>
-           <bold>false</bold>
+           <pointsize>-1</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -127,9 +245,15 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QFrame" name="frame_botones_menu">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
          <property name="maximumSize">
           <size>
-           <width>200</width>
+           <width>16777215</width>
            <height>16777215</height>
           </size>
          </property>
@@ -318,7 +442,7 @@
           <item>
            <widget class="QStackedWidget" name="stackedWidget">
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_menu_proyectos">
              <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -340,16 +464,6 @@
                    </column>
                    <column>
                     <property name="text">
-                     <string>Ubicacion</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
-                     <string>Presupuesto</string>
-                    </property>
-                   </column>
-                   <column>
-                    <property name="text">
                      <string>Estado</string>
                     </property>
                    </column>
@@ -363,7 +477,17 @@
                  <item row="0" column="0">
                   <widget class="QPushButton" name="botonaccion_refrescar">
                    <property name="text">
-                    <string>PushButton</string>
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../resources/imagenes/proyectos/reloading.png</normaloff>../resources/imagenes/proyectos/reloading.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>45</width>
+                     <height>45</height>
+                    </size>
                    </property>
                   </widget>
                  </item>
@@ -813,6 +937,23 @@
                      </widget>
                     </item>
                    </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="boton_regresar">
+                   <property name="text">
+                    <string>Regresar</string>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>../resources/imagenes/proyectos/exit.png</normaloff>../resources/imagenes/proyectos/exit.png</iconset>
+                   </property>
+                   <property name="iconSize">
+                    <size>
+                     <width>30</width>
+                     <height>30</height>
+                    </size>
+                   </property>
                   </widget>
                  </item>
                 </layout>

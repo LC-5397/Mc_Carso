@@ -16,6 +16,86 @@
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* ======== FONDO GENERAL ======== */
+QMainWindow {
+    background-color: #000045;   /* Fondo azul marino profundo */
+}
+
+/* Central widget también debe ser oscuro */
+#centralwidget {
+    background-color: #000045;
+}
+
+/* ======== FRAME GENERAL ======== */
+#frame {
+    background-color: transparent; /* Deja ver el fondo oscuro */
+}
+
+/* ======== TÍTULO &quot;MC CARSO&quot; ======== */
+#label_mccarso, #label {
+    font: bold 24pt &quot;Segoe UI&quot;;
+    color: #ffffff;        /* Blanco para contraste sobre fondo oscuro */
+    background-color: transparent;
+    letter-spacing: 2px;
+}
+
+/* ======== LABELS ======== */
+QLabel {
+    color: #dbe8ff;        /* Azul claro suave, queda precioso sobre #000045 */
+    background-color: transparent;
+    font: 10pt &quot;Segoe UI&quot;;
+}
+
+/* ======== CAMPOS DE TEXTO ======== */
+QLineEdit {
+    background-color: #ffffff;
+    border: 2px solid #4d54ff;  /* Azul eléctrico suave */
+    border-radius: 8px;
+    padding: 6px;
+    color: #000045;             /* Texto oscuro dentro de inputs */
+}
+
+QLineEdit:focus {
+    border: 2px solid #b0b6ff;  /* Borde más claro al enfocar */
+}
+
+/* ======== BOTÓN LOGIN ======== */
+#Button_login {
+    background-color: #CFE4FA;  /* Azul brillante que contrasta */
+    color: black;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font: bold 11pt &quot;Segoe UI&quot;;
+}
+
+#Button_login:hover {
+    background-color: #6e74ff;
+}
+
+#Button_login:pressed {
+    background-color: #272b99;
+}
+
+/* ======== BOTONES GENERALES ======== */
+QPushButton {
+    background-color: #4d54ff; 
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    color: #ffffff;
+    font: bold 9pt &quot;Segoe UI&quot;;
+}
+
+QPushButton:hover {
+    background-color: #6e74ff;
+}
+
+QPushButton:pressed {
+    background-color: #272b99;
+}
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
     <item>
@@ -31,7 +111,11 @@
         <widget class="QLabel" name="label_mccarso">
          <property name="font">
           <font>
-           <pointsize>15</pointsize>
+           <family>Segoe UI</family>
+           <pointsize>24</pointsize>
+           <weight>75</weight>
+           <italic>false</italic>
+           <bold>true</bold>
           </font>
          </property>
          <property name="text">
@@ -80,7 +164,7 @@
        <item>
         <widget class="QStackedWidget" name="stackedWidget">
          <property name="currentIndex">
-          <number>2</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="page_login">
           <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -107,7 +191,7 @@
                </spacer>
               </item>
               <item row="3" column="2">
-               <widget class="QLineEdit" name="lineEdit_2">
+               <widget class="QLineEdit" name="password_login">
                 <property name="minimumSize">
                  <size>
                   <width>450</width>
@@ -165,7 +249,7 @@
                </spacer>
               </item>
               <item row="1" column="2">
-               <widget class="QLineEdit" name="lineEdit">
+               <widget class="QLineEdit" name="usuario_login">
                 <property name="minimumSize">
                  <size>
                   <width>450</width>
