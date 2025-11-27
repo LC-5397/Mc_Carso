@@ -4,7 +4,7 @@ from modelo.conexionbd import ConexionBD
 class EmpleadosDAO:
     def __init__(self):
         self.bd = ConexionBD()
-        self.proyecto= Proyecto()
+        self.empleados= Empleados()
 
     def listarEmpleados(self):
             basedatos = ConexionBD()

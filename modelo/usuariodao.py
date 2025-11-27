@@ -1,10 +1,10 @@
-from modelo.proyecto import Proyecto
+from modelo.usuario import Usuario
 from modelo.conexionbd import ConexionBD
 
-class ProyectoDAO:
+class UsuarioDAO:
     def __init__(self):
         self.bd = ConexionBD()
-        self.proyecto= Proyecto()
+        self.usuario= Usuario()
 
     def listarUsuario(self):
             basedatos = ConexionBD()

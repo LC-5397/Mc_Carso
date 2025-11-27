@@ -4,7 +4,7 @@ from modelo.conexionbd import ConexionBD
 class IncidentesDAO:
     def __init__(self):
         self.bd = ConexionBD()
-        self.proyecto= Incidentes()
+        self.incidentes= Incidentes()
 
     def listarIncidentes(self):
             basedatos = ConexionBD()
