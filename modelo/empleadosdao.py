@@ -1,7 +1,7 @@
 from modelo.empleados import Empleados
 from modelo.conexionbd import ConexionBD
 
-class ProyectoDAO:
+class EmpleadosDAO:
     def __init__(self):
         self.bd = ConexionBD()
         self.empleados= Empleados()

@@ -1,7 +1,7 @@
 from modelo.proveedores import Proveedores
 from modelo.conexionbd import ConexionBD
 
-class ProyectoDAO:
+class ProveedoresDAO:
     def __init__(self):
         self.bd = ConexionBD()
         self.proveedores= Proveedores()

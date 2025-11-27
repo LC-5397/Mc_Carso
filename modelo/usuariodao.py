@@ -1,7 +1,7 @@
 from modelo.usuario import Usuario
 from modelo.conexionbd import ConexionBD
 
-class ProyectoDAO:
+class UsuarioDAO:
     def __init__(self):
         self.bd = ConexionBD()
         self.usuario= Usuario()

@@ -1,7 +1,7 @@
 from modelo.incidentes import Incidentes
 from modelo.conexionbd import ConexionBD
 
-class ProyectoDAO:
+class IncidentesDAO:
     def __init__(self):
         self.bd = ConexionBD()
         self.incidentes= Incidentes()
