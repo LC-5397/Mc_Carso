@@ -5,11 +5,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from modelo.proyectodao import ProyectoDAO
 #2.- Cargar archivo .ui
 class Load_ui_Proyecto(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, username, nombre, cargo, salario):
         super().__init__()
-        # Cargar archivo .ui
         uic.loadUi("ui/menu_proyectos.ui", self)
-        self.show()
+
+        # Guardamos los datos del usuario para poder regresarlos al menú
+        self.username = username
+        self.nombre = nombre
+        self.cargo = cargo
+        self.salario = salario
+
+        self.boton_salir.clicked.connect(self.regresar_menu)
 
         self.proyectodao = ProyectoDAO() 
         self.menu_colapsado= False
@@ -19,7 +25,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setWindowOpacity(1)
         #Cerrar ventana
-        self.boton_salir.clicked.connect(self.volver_al_menu)
+        #self.boton_salir.clicked.connect(self.volver_al_menu)
         
         # mover ventana
         self.frame_superior.mouseMoveEvent = self.mover_ventana
@@ -46,11 +52,22 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         self.boton_buscar_eliminar.clicked.connect(self.buscar_eliminar)
 
         self.botonaccion_refrescar.clicked.connect(self.llenar_tabla)
-        self.boton_regresar.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.page_menu_proyectos))
         
     
 #5.- Operaciones con el modelo de datos 
 
+    def regresar_menu(self):
+        from load.load_ui_menu import Load_ui_Menu
+        self.close() 
+        self.menu = Load_ui_Menu(
+            username=self.username,
+            nombre=self.nombre,
+            cargo=self.cargo,
+            salario=self.salario
+        )
+        self.menu.show()
+            
+            
     def llenar_tabla(self):
         self.tabla_proyectos.setRowCount(0)
         proyectos = self.proyectodao.listarProyectos()
@@ -100,7 +117,7 @@ class Load_ui_Proyecto(QtWidgets.QMainWindow):
         # Crear nueva instancia del login
         self.login_dialog = Load_ui_login()
         self.login_dialog.show()
-        self.login_dialog.stackedWidget.setCurrentWidget(self.login_dialog.page_menu)
+        self.login_dialog.stackedWidget.setCurrentWidget(self.login_dialog.page_proyectos)
         
     def guardar_proyecto(self):
         nombre = self.nombre_agregar.text()

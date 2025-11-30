@@ -1,54 +1,49 @@
-# 1.- Importar librerías
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from modelo.logindao import LoginDAO  
+from modelo.usuariodao import UsuarioDAO
 
-# 2.- Clase principal para manejar el login
 class Load_ui_login(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("ui/login.ui", self)
 
-        # Configuración de ventana
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setWindowOpacity(1.0)
 
-        # Páginas del stackedWidget
-        self.page_login = self.findChild(QtWidgets.QWidget, "page_login")
-
-        # Botones
         self.Button_login.clicked.connect(self.ingresar)
-        #Cerrar ventana
-        #self.boton_salir_login.clicked.connect(lambda: self.close())
-
-    # LOGIN
 
     def ingresar(self):
-        
-        usuario=self.usuario_login.text().strip()
-        contrasena=self.password_login.text().strip()
+        usuario = self.usuario_login.text().strip()
+        contrasena = self.password_login.text().strip()
+
         login_dao = LoginDAO()
+        usuario_dao = UsuarioDAO()
+
         valido = login_dao.verificar_usuario(usuario, contrasena)
 
-        if valido:
-            print("Login correcto. Abriendo menú...")
-            self.abrir_menu()
-        else:
+        if not valido:
             print("Usuario o contraseña incorrectos.")
-            #self.stackedWidget.setCurrentWidget(self.page_error)
+            return
+
+        print("Login correcto... recuperando datos del usuario")
+
+        datos = usuario_dao.obtener_datos_usuario(usuario, contrasena)
+
+        if datos is None:
+            print("No se encontraron datos asociados.")
+            return
+
+        nombre = datos["nombre"]
+        cargo = datos["cargo"]
+        salario = datos["salario"]
+
+        # 3. Abrir menú enviando los datos
+        self.abrir_menu(usuario, nombre, cargo, salario)
 
 
-    def abrir_menu(self):
+    def abrir_menu(self, username, nombre, cargo, salario):
         self.close()
         from load.load_ui_menu import Load_ui_Menu
-        self.empleados = Load_ui_Menu()
-        self.empleados.show()
-
-
-    # CERRAR SESIÓN
- 
-    def cerrar_sesion(self):
-        print("Cerrando sesión...")
-        self.usuario_login.clear()
-        self.password_login.clear()
-        self.stackedWidget.setCurrentWidget(self.page_login)
+        self.menu = Load_ui_Menu(username, nombre, cargo, salario)
+        self.menu.show()

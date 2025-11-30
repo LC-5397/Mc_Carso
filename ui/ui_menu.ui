@@ -111,11 +111,11 @@ QLineEdit:focus {
           </size>
          </property>
          <property name="text">
-          <string>Anterior</string>
+          <string>Salir</string>
          </property>
          <property name="icon">
           <iconset>
-           <normaloff>../resources/imagenes/menu/cursor.png</normaloff>../resources/imagenes/menu/cursor.png</iconset>
+           <normaloff>../resources/imagenes/menu/salir.png</normaloff>../resources/imagenes/menu/salir.png</iconset>
          </property>
          <property name="iconSize">
           <size>
@@ -392,7 +392,7 @@ QLineEdit:focus {
              <enum>QFrame::Plain</enum>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="page_incidentes">
              <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -447,45 +447,32 @@ QLineEdit:focus {
                  <widget class="QTableWidget" name="tableWidget_2">
                   <column>
                    <property name="text">
-                    <string>Proyecto</string>
-                   </property>
-                   <property name="textAlignment">
-                    <set>AlignLeading|AlignVCenter</set>
+                    <string>Usuario</string>
                    </property>
                   </column>
                   <column>
                    <property name="text">
-                    <string>Cliente</string>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Presupuesto</string>
-                   </property>
-                  </column>
-                  <column>
-                   <property name="text">
-                    <string>Estado</string>
+                    <string>Contraseña</string>
                    </property>
                   </column>
                  </widget>
                 </item>
                 <item row="2" column="0">
-                 <widget class="QLabel" name="label_2">
+                 <widget class="QLabel" name="label_nombreusuario">
                   <property name="text">
                    <string>Nombre: </string>
                   </property>
                  </widget>
                 </item>
                 <item row="3" column="0">
-                 <widget class="QLabel" name="label_3">
+                 <widget class="QLabel" name="label_cargousuario">
                   <property name="text">
                    <string>Cargo:</string>
                   </property>
                  </widget>
                 </item>
                 <item row="4" column="0">
-                 <widget class="QLabel" name="label_4">
+                 <widget class="QLabel" name="label_salariousuario">
                   <property name="text">
                    <string>Salario:</string>
                   </property>

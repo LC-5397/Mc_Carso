@@ -1,6 +1,5 @@
 import sys
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
-
 from modelo.clientesdao import ClientesDAO
 from modelo.empleadosdao import EmpleadosDAO
 from modelo.usuariodao import UsuarioDAO
@@ -8,12 +7,21 @@ from modelo.proveedoresdao import ProveedoresDAO
 from modelo.incidentesdao import IncidentesDAO
 
 class Load_ui_Menu(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, username, nombre, cargo, salario):
         super().__init__()
-        # 1.- Cargar archivo .ui
-        # Asegúrate de que el nombre del archivo coincida con el que guardaste
-        uic.loadUi("ui/ui_menu.ui", self) 
-        
+        uic.loadUi("ui/ui_menu.ui", self)
+
+        # Guardar datos
+        self.username = username
+        self.nombre = nombre
+        self.cargo = cargo
+        self.salario = salario
+
+        # Mostrar en los labels de page_usuario
+        self.label_nombreusuario.setText(str(self.nombre))
+        self.label_cargousuario.setText(str(self.cargo))
+        self.label_salariousuario.setText(str(self.salario))
+
         # 2.- Configuración de Ventana (Sin bordes y transparencia)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setWindowOpacity(1)
@@ -135,9 +143,14 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             self.tableWidget_2.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(item[2]))) # Password
             fila += 1
 
-    def abrir_modulo_proyectos(self):
+    def abrir_modulo_proyectos(self):  
         from load.load_ui_proyectos import Load_ui_Proyecto
-        self.ventana_proyectos = Load_ui_Proyecto()
+        self.ventana_proyectos = Load_ui_Proyecto(
+            self.username,
+            self.nombre,
+            self.cargo,
+            self.salario
+        )
         self.ventana_proyectos.show()
         self.close()
 
