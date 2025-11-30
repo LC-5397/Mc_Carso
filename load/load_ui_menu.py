@@ -11,6 +11,8 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
         super().__init__()
         uic.loadUi("ui/ui_menu.ui", self)
 
+        dao = UsuarioDAO()
+        
         # Guardar datos
         self.username = username
         self.nombre = nombre
@@ -65,7 +67,8 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
         self.boton_actualizar_3.clicked.connect(self.llenar_tabla_empleados)
         self.boton_actualizar.clicked.connect(self.llenar_tabla_proveedores)
         self.boton_actualizar_5.clicked.connect(self.llenar_tabla_incidentes)
-        self.boton_actualizar_4.clicked.connect(self.llenar_tabla_usuario_proyectos)
+        self.boton_actualizar_4.clicked.connect(lambda: self.llenar_tabla_usuario_proyectos(self.username))
+
 
         self.frame_superior.mouseMoveEvent = self.mover_ventana
         self.clickPosition = None
@@ -134,14 +137,16 @@ class Load_ui_Menu(QtWidgets.QMainWindow):
             self.tabla_incidentes.setItem(fila, 3, QtWidgets.QTableWidgetItem(str(item[3]))) # Fecha
             fila += 1
 
-    def llenar_tabla_usuario_proyectos(self):
-        datos = self.usuario_dao.listarUsuario()
-        self.tableWidget_2.setRowCount(len(datos))
+    def llenar_tabla_usuario_proyectos(self,username):
+        datos_usuario = self.usuario_dao.listarUsuario(username)
+        self.tableWidget_2.setRowCount(len(datos_usuario))
         fila = 0
-        for item in datos:
-            self.tableWidget_2.setItem(fila, 0, QtWidgets.QTableWidgetItem(str(item[1]))) # Usuario
-            self.tableWidget_2.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(item[2]))) # Password
+        for item in datos_usuario:
+            self.tableWidget_2.setItem(fila, 0, QtWidgets.QTableWidgetItem(str(item[0]))) # Usuario
+            self.tableWidget_2.setItem(fila, 1, QtWidgets.QTableWidgetItem(str(item[1]))) # Password
             fila += 1
+            
+            
 
     def abrir_modulo_proyectos(self):  
         from load.load_ui_proyectos import Load_ui_Proyecto

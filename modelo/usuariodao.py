@@ -4,17 +4,20 @@ from modelo.conexionbd import ConexionBD
 class UsuarioDAO:
     def __init__(self):
         self.bd = ConexionBD()
-        self.usuario= Usuario()
 
-    def listarUsuario(self):
-            basedatos = ConexionBD()
-            basedatos.establecerConexionBD()
-            sp = "EXEC dbo.sp_listar_usuarios"
-            cursor = basedatos.conexion.cursor()
-            cursor.execute(sp)
-            datos = cursor.fetchall()
-            basedatos.cerrarConexionBD()
-            return datos
+    def listarUsuario(self, username):
+        basedatos = ConexionBD()
+        basedatos.establecerConexionBD()
+
+        sp = "EXEC dbo.sp_listar_usuarios @username = ?"
+        cursor = basedatos.conexion.cursor()
+        cursor.execute(sp, (username,))
+        datos = cursor.fetchall()
+        basedatos.cerrarConexionBD()
+        print("DEBUG DAO username recibido:", username)
+        print("DEBUG DAO filas:", datos)
+
+        return datos
 
     def obtener_datos_usuario(self, username, password):
         basedatos = ConexionBD()
