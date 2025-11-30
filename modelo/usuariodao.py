@@ -15,7 +15,7 @@ class UsuarioDAO:
             datos = cursor.fetchall()
             basedatos.cerrarConexionBD()
             return datos
-        
+
     def obtener_datos_usuario(self, username, password):
         basedatos = ConexionBD()
         basedatos.establecerConexionBD()
@@ -37,4 +37,5 @@ class UsuarioDAO:
             }
         else:
             return None
+
 
